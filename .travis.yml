@@ -8,3 +8,65 @@ before_install:
 script:
 - xcodebuild -project ios_system.xcodeproj -alltargets -sdk iphoneos -configuration Debug -quiet
 - xcodebuild -project ios_system.xcodeproj -alltargets -sdk iphonesimulator -configuration Debug -quiet
+# Settings only relevant for development
+devel:
+  # Settings for OctoPrint's internal caching
+  cache:
+    # Whether to enable caching. Defaults to true. Setting it to false will cause the UI to always
+    # be fully rerendered on request to / on the server.
+    enabled: true
+
+    # Whether to enable the preemptive cache
+    preemptive: true
+
+  # Settings for stylesheet preference. OctoPrint will prefer to use the stylesheet type
+  # specified here. Usually (on a production install) that will be the compiled css (default).
+  # Developers may specify less here too.
+  stylesheet: css
+
+  # Settings for OctoPrint's web asset merging and minifying
+  webassets:
+    # If set to true, OctoPrint will merge all JS, all CSS and all Less files into one file per type
+    # to reduce request count. Setting it to false will load all assets individually. Note: if this is set to
+    # false, no minification will take place regardless of the minify setting below.
+    bundle: true
+
+    # If set to true, OctoPrint will minify its viewmodels (that includes those of plugins). Note: if bundle is
+    # set to false, no minification will take place either.
+    minify: true
+
+    # Whether to delete generated web assets on server startup (forcing a regeneration)
+    clean_on_startup: true
+
+  # Settings for the virtual printer
+  virtualPrinter:
+
+    # Whether to enable the virtual printer and include it in the list of available serial connections.
+    # Defaults to false.
+    enabled: true
+
+    # Whether to send an additional "ok" after a resend request (like Repetier)
+    okAfterResend: false
+
+    # Whether to force checksums and line number in the communication (like Repetier), if set to true
+    # printer will only accept commands that come with linenumber and checksum and throw an error for
+    # lines that don't. Defaults to false
+    forceChecksum: false
+
+    # Whether to send "ok" responses with the line number that gets acknowledged by the "ok". Defaults
+    # to false.
+    okWithLinenumber: false
+
+    # Number of extruders to simulate on the virtual printer. Map from tool id (0, 1, ...) to temperature
+    # in °C
+    numExtruders: 1
+
+    # Allows pinning certain hotends to a fixed temperature
+    pinnedExtruders: null
+
+    # Whether to include the current tool temperature in the M105 output as separate T segment or not.
+    #
+    # True:  > M105
+    #        < ok T:23.5/0.0 T0:34.3/0.0 T1:23.5/0.0 B:43.2/0.0
+    # False: > M105
+    #        < ok T0:34.3/0.0 T1:23.5/0.0 B:43.2/0.0
